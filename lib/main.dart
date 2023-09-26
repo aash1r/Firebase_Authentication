@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase/firebase_options.dart';
-import 'package:flutter_firebase/screens/email_auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_firebase/screens/home_screen.dart';
+import 'package:flutter_firebase/screens/phone_auth/signin_with_phone.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your appl ication.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: (FirebaseAuth.instance.currentUser != null)
+          ? const HomeScreen()
+          : const SigninWithPhone(),
     );
   }
 }

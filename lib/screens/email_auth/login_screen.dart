@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (email == "" || password == "") {
       var snackbar =
-          const SnackBar(content: Text("Please fill in the required fiels!"));
+          const SnackBar(content: Text("Please fill in the required fields!"));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     } else {
       try {
@@ -29,7 +29,9 @@ class _LoginScreenState extends State<LoginScreen> {
             .signInWithEmailAndPassword(email: email, password: password);
         if (userCredential.user != null) {
           // ignore: use_build_context_synchronously
-          Navigator.push(context,
+          Navigator.popUntil(context, (route) => route.isFirst);
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));
         }
       } on FirebaseAuthException catch (e) {
