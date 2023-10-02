@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase/screens/phone_auth/signin_with_phone.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -86,19 +88,38 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20,
             ),
             StreamBuilder(
-                stream: firestore.collection("Users").snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    if (snapshot.hasData && snapshot.data != null) {
-                      ListView.builder(itemBuilder: (context, index) {});
-                    }
-                  } else {
-                    Center(
-                      child: CircularProgressIndicator(),
+              stream: firestore.collection("Users").snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.active) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data?.docs.length,
+                          itemBuilder: (context, index) {
+                            Map userMap = snapshot.data!.docs[index].data();
+                            return ListTile(
+                              title: Text(userMap["name"]),
+                              subtitle: Text(userMap["email"]),
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    snapshot.data!.docs[index].reference
+                                        .delete();
+                                  },
+                                  icon: const Icon(Icons.delete)),
+                            );
+                          }),
                     );
+                  } else {
+                    const Text("No Data!");
                   }
-                  return ListTile();
-                })
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return const Text("hehe");
+              },
+            ),
           ],
         ),
       ),

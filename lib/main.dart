@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: (FirebaseAuth.instance.currentUser != null)
-          ? const HomeScreen()
+          ?  HomeScreen()
           : const SigninWithPhone(),
     );
   }
